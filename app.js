@@ -29,7 +29,7 @@ const connection = mysql.createConnection({
     database: "employee_db"
 });
 
-connect(connection);
+// connect(connection);
 // connection.connect(function(err) {
 //     if (err) throw err;
 //     console.log("connected as id " + connection.threadId);
@@ -49,15 +49,18 @@ function afterConnection() {
 // Initialization function
 const init = async () => {
   try {
-    //Call logo art
-    logo();
     //Ask action question
     const data = await inquirer.prompt(questions[0]);
     console.log(data);
     //Switch statement to determine what to do per user answers
     switch (data.action) {
         case 'View All Employees':
-            
+            connection.query("SELECT * FROM employee", function (err, res) {
+                if (err) throw err;
+                // Log all results of the SELECT statement
+                console.log(res); 
+            });
+            init();
             break;
         case 'View All Employees by MGR':
             
@@ -96,6 +99,7 @@ const init = async () => {
 
             break;
         default:
+            connection.end();
             break;
     }
     
@@ -105,5 +109,7 @@ const init = async () => {
   }
 }
 
+//Call logo art
+logo();
 //Initialization of app
 init();
