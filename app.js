@@ -13,6 +13,37 @@ const LIB_DIR = path.resolve(__dirname, './app/lib');
 //===============//
 const logo = require(`${LIB_DIR}/logo.js`);
 const questions = require(`${LIB_DIR}/questions.js`);
+const connect = require(`${LIB_DIR}/db-connect.js`);
+
+const connection = mysql.createConnection({
+    host: "localhost",
+  
+    // Your port; if not 3306
+    port: 3306,
+  
+    // Your username
+    user: "root",
+  
+    // Your password
+    password: "root",
+    database: "employee_db"
+});
+
+connect(connection);
+// connection.connect(function(err) {
+//     if (err) throw err;
+//     console.log("connected as id " + connection.threadId);
+//     afterConnection();
+// });
+
+function afterConnection() {
+    connection.query("SELECT * FROM role", function(err, res) {
+        if (err) throw err;
+        console.log(res);
+        connection.end();
+    });
+}
+
 
 
 // Initialization function
@@ -26,26 +57,43 @@ const init = async () => {
     //Switch statement to determine what to do per user answers
     switch (data.action) {
         case 'View All Employees':
-            const question2 = await inquirer.prompt(questions[1]);
-            console.log(question2);
-            break;
-        case 'View All Employees by Dept.':
             
             break;
         case 'View All Employees by MGR':
             
             break;
+        case 'View All Roles':
+            
+            break;
+        case 'View All Departments':
+
+            break;
+        case 'Update Employee Role':
+
+            break;
+        case 'Update Employee MGR':
+
+            break;
         case 'Add Employee':
             
+            break;
+        case 'Add Role':
+        
+            break;
+        case 'Add Department':
+        
             break;   
         case 'Remove Employee':
             
             break;
-        case 'Update Employee Role':
+        case 'Remove Role':
             
             break;
-        case 'Update Employee MGR':
+        case 'Remove Department':
             
+            break;
+        case 'View a Dept. Total Utilized Budget':
+
             break;
         default:
             break;

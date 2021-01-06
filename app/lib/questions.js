@@ -6,12 +6,19 @@ module.exports =  [
             message: 'What do you want to do?',
             choices: [
                 'View All Employees',
-                'View All Employees by Dept.',
                 'View All Employees by MGR',
-                'Add Employee',
-                'Remove Employee',
+                'View All Roles',
+                'View All Departments',
                 'Update Employee Role',
                 'Update Employee MGR',
+                'Add Employee',
+                'Add Role',
+                'Add Department',
+                'Remove Employee',
+                'Remove Role',
+                'Remove Department',
+                'View a Dept. Total Utilized Budget',
+                'Quit'
             ],
         }
     ],
