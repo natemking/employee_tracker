@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/natemking/employee_tracker#readme",
   "dependencies": {
+    "cfonts": "^2.9.1",
     "inquirer": "^7.3.3",
     "mysql": "^2.18.1"
   }
