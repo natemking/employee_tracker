@@ -11,11 +11,15 @@ const LIB_DIR = path.resolve(__dirname, './app/lib');
 
 //*** Modules ***//
 //===============//
+const logo = require(`${LIB_DIR}/logo.js`);
 const questions = require(`${LIB_DIR}/questions.js`);
+
 
 // Initialization function
 const init = async () => {
   try {
+    //Call logo art
+    logo();
     const data = await inquirer.prompt(questions[0]);
     console.log(data);
     switch (data.action) {
