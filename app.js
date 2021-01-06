@@ -11,7 +11,7 @@ const LIB_DIR = path.resolve(__dirname, './app/lib');
 
 //*** Modules ***//
 //===============//
-const action = require(`${LIB_DIR}/action`);
+const action = require(`${LIB_DIR}/action.js`);
 
 // Initialization function
 const init = async () => {
