@@ -20,8 +20,10 @@ const init = async () => {
   try {
     //Call logo art
     logo();
+    //Ask action question
     const data = await inquirer.prompt(questions[0]);
     console.log(data);
+    //Switch statement to determine what to do per user answers
     switch (data.action) {
         case 'View All Employees':
             const question2 = await inquirer.prompt(questions[1]);
@@ -55,5 +57,5 @@ const init = async () => {
   }
 }
 
-
+//Initialization of app
 init();

@@ -1,3 +1,5 @@
+//** Dependencies ***//
+//===================//
 const cfonts = require('cfonts');
 
 //App text art displayed at initialization
