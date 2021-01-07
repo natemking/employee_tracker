@@ -2,7 +2,7 @@
 //===================//
 const cTable = require('console.table');
 const inquirer = require('inquirer');
-const mysql = require('mysql');
+// const mysql = require('mysql');
 const path = require('path');
 
 //*** Directories ***//
@@ -14,16 +14,15 @@ const LIB_DIR = path.resolve(__dirname, './app/lib');
 //===============//
 const logo = require(`${LIB_DIR}/logo.js`);
 const questions = require(`${LIB_DIR}/questions.js`);
-const connect = require(`${LIB_DIR}/db-connect.js`);
 const view = require(`${LIB_DIR}/view.js`);
 
-const connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "root",
-    database: "employee_db"
-});
+// const connection = mysql.createConnection({
+//     host: "localhost",
+//     port: 3306,
+//     user: "root",
+//     password: "root",
+//     database: "employee_db"
+// });
 
 // connect(connection);
 // connection.connect(function(err) {
@@ -68,8 +67,7 @@ const init = async () => {
             init();
             break;
         case 'View All Departments':
-            view.allDept();
-            init();
+            await view.allDept();
             break;
         case 'Update Employee Role':
 
@@ -113,3 +111,6 @@ const init = async () => {
 logo();
 //Initialization of app
 init();
+
+//Export init function
+module.exports.init = init;
