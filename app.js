@@ -1,5 +1,6 @@
 //** Dependencies ***//
 //===================//
+const cTable = require('console.table');
 const inquirer = require('inquirer');
 const mysql = require('mysql');
 const path = require('path');
@@ -14,17 +15,12 @@ const LIB_DIR = path.resolve(__dirname, './app/lib');
 const logo = require(`${LIB_DIR}/logo.js`);
 const questions = require(`${LIB_DIR}/questions.js`);
 const connect = require(`${LIB_DIR}/db-connect.js`);
+const view = require(`${LIB_DIR}/view.js`);
 
 const connection = mysql.createConnection({
     host: "localhost",
-  
-    // Your port; if not 3306
     port: 3306,
-  
-    // Your username
     user: "root",
-  
-    // Your password
     password: "root",
     database: "employee_db"
 });
@@ -45,31 +41,35 @@ function afterConnection() {
 }
 
 
-
 // Initialization function
 const init = async () => {
   try {
     //Ask action question
     const data = await inquirer.prompt(questions[0]);
-    console.log(data);
+   
     //Switch statement to determine what to do per user answers
     switch (data.action) {
         case 'View All Employees':
-            connection.query("SELECT * FROM employee", function (err, res) {
-                if (err) throw err;
-                // Log all results of the SELECT statement
-                console.log(res); 
-            });
+            // connection.query("SELECT * FROM employee", function (err, res) {
+            //     if (err) throw err;
+            //     // Log all results of the SELECT statement
+            //     console.table(res); 
+            //     init();
+            // });
+            view.all();
             init();
             break;
         case 'View All Employees by MGR':
-            
+            view.allByMgr();
+            init();
             break;
         case 'View All Roles':
-            
+            view.allRole();
+            init();
             break;
         case 'View All Departments':
-
+            view.allDept();
+            init();
             break;
         case 'Update Employee Role':
 
@@ -77,7 +77,7 @@ const init = async () => {
         case 'Update Employee MGR':
 
             break;
-        case 'Add Employee':
+        case 'Add Employee': 
             
             break;
         case 'Add Role':

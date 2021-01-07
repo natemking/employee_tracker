@@ -56,7 +56,7 @@ Licensed under the GNU GPLv3.0 License. Copyright © 2020
 
 ## Credits
 
-<!-- * [Background image from subtle backgrounds](https://www.toptal.com/designers/subtlepatterns/?s=paper)
+<!-- * [Module Export more that one function](https://stackoverflow.com/questions/16631064/declare-multiple-module-exports-in-node-js/50692464)
 
 * [Serving static files in Express](https://expressjs.com/en/starter/static-files.html)
 
