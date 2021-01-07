@@ -82,7 +82,7 @@ const init = async () => {
             
             break;
         case 'Remove Role':
-            
+            remove.removeRole();
             break;
         case 'Remove Department':
             remove.removeDept();

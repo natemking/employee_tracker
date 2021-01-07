@@ -25,10 +25,10 @@ const connection = mysql.createConnection({
 const addEmployee = async () => {
     
 };
-
+//Function to add a role
 const addRole = () => {
     //Get Departments from DB
-    connection.query('SELECT name, id FROM department ORDER BY name asc;', async (err, res) => {
+    connection.query('SELECT * FROM department ORDER BY id asc;', async (err, res) => {
         //Prompt the user for what role they want to add
         const data = await inquirer.prompt(
             [
@@ -51,22 +51,28 @@ const addRole = () => {
                     name: 'addRoleDept',
                     message: 'Which department is this for?',
                     choices: () => {
-                        return res.map(dept => dept.name);
+                        return res.map(dept => `${dept.id} ${dept.name}`);
                     }
                 }
             ]
         );
-        console.log(data);
+        //Add the role that the user has specified
         connection.query('INSERT INTO role SET ?', 
             {
                 title: data.addRole,
                 salary: data.addSalary,
-                department_id: data.add
+                department_id: parseFloat(data.addRoleDept[0])
+            },
+            (err, res) => {
+                if (err) throw err;
+                console.log(chalk.redBright(`\n${data.addRole} has been added to roles\n`));
+                connection.end();
+                app.init();
             }
-        )
+        );
     });
 }
-
+//Function to add a department
 const addDept = () => {
     //Get departments from DB
     connection.query('SELECT name FROM department', async (err,res) => {

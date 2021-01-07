@@ -25,11 +25,39 @@ const connection = mysql.createConnection({
 const removeEmployee = async () => {
 
 };
-
+//Function to remove a role
 const removeRole = async () => {
-
+    //Get roles from DB
+    connection.query('SELECT title FROM role ORDER BY title asc', async (err, res) => {
+        if (err) throw err;
+        //Prompt what dept to be removed
+        const data = await inquirer.prompt(
+            [
+                {
+                    type: 'list',
+                    name: 'removeRole',
+                    message: 'Please select a role to remove',
+                    choices: () => {
+                        return res.map(dept => dept.title);
+                    }
+                }
+            ]
+        );
+        //Delete the chosen role
+        connection.query('DELETE FROM role WHERE ?',
+            {
+                title: data.removeRole
+            },
+            (err, res) => {
+                if (err) throw err;
+                console.log(chalk.redBright(`\n${data.removeRole} has been removed from roles\n`));
+                connection.end();
+                app.init();
+            }
+        );
+    });
 };
-
+//Function to remove a dept
 const removeDept = () => {
     //Get departments from DB
     connection.query('SELECT name FROM department ORDER BY name asc;', async (err, res) => {
@@ -54,7 +82,7 @@ const removeDept = () => {
             },
             (err, res) => {
                 if (err) throw err;
-                console.log(chalk.redBright(`\n${data.removeDept} has been deleted from departments\n`));
+                console.log(chalk.redBright(`\n${data.removeDept} has been removed from departments\n`));
                 connection.end();
                 app.init();
             }
