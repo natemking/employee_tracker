@@ -42,5 +42,5 @@ INSERT INTO employee_db.role (title, salary, department_id) VALUES ('IT MGR', 15
 
 UPDATE role SET department_id=9 WHERE id=20;
 
-INSERT INTO employee_db.employee (first_name, last_name, manager_id, role_id) VALUES ('Nate', 'King', null, 6);
+INSERT INTO employee_db.employee (first_name, last_name, manager_id, role_id) VALUES ('Brad', 'Fitzpatrick', 1, 26);
 

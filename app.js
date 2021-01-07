@@ -15,6 +15,8 @@ const LIB_DIR = path.resolve(__dirname, './app/lib');
 const logo = require(`${LIB_DIR}/logo.js`);
 const questions = require(`${LIB_DIR}/questions.js`);
 const view = require(`${LIB_DIR}/view.js`);
+const add = require(`${LIB_DIR}/add.js`);
+const remove = require(`${LIB_DIR}/remove.js`);
 
 // const connection = mysql.createConnection({
 //     host: "localhost",
@@ -44,20 +46,15 @@ function afterConnection() {
 const init = async () => {
   try {
     //Ask action question
-    const data = await inquirer.prompt(questions[0]);
+    const data = await inquirer.prompt(questions()[0]);
    
     //Switch statement to determine what to do per user answers
     switch (data.action) {
         case 'View All Employees':
-            // connection.query("SELECT * FROM employee", function (err, res) {
-            //     if (err) throw err;
-            //     // Log all results of the SELECT statement
-            //     console.table(res); 
-            //     init();
-            // });
             view.all();
             break;
         case 'View All Employees by MGR':
+            // await inquirer.prompt(questions()[1]);
             view.allByMgr();
             break;
         case 'View All Roles':
@@ -79,7 +76,7 @@ const init = async () => {
         
             break;
         case 'Add Department':
-        
+            add.addDept();
             break;   
         case 'Remove Employee':
             
@@ -88,7 +85,7 @@ const init = async () => {
             
             break;
         case 'Remove Department':
-            
+            remove.removeDept();
             break;
         case 'View a Dept. Total Utilized Budget':
 

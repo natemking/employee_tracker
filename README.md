@@ -58,7 +58,7 @@ Licensed under the GNU GPLv3.0 License. Copyright © 2020
 
 <!-- * [Module Export more that one function](https://stackoverflow.com/questions/16631064/declare-multiple-module-exports-in-node-js/50692464)
 
-* [Serving static files in Express](https://expressjs.com/en/starter/static-files.html)
+* [Concatenating MySQL results](https://stackoverflow.com/questions/4494775/mysql-concat-function)
 
 * [Favicon](https://favicon.io/emoji-favicons/)
 
