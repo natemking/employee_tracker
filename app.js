@@ -56,18 +56,15 @@ const init = async () => {
             //     init();
             // });
             view.all();
-            init();
             break;
         case 'View All Employees by MGR':
             view.allByMgr();
-            init();
             break;
         case 'View All Roles':
             view.allRole();
-            init();
             break;
         case 'View All Departments':
-            await view.allDept();
+            view.allDept();
             break;
         case 'Update Employee Role':
 
@@ -97,7 +94,6 @@ const init = async () => {
 
             break;
         default:
-            connection.end();
             break;
     }
     
