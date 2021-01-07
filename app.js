@@ -64,7 +64,7 @@ const init = async () => {
             view.allDept();
             break;
         case 'Update Employee Role':
-
+            
             break;
         case 'Update Employee MGR':
 
@@ -73,7 +73,7 @@ const init = async () => {
             
             break;
         case 'Add Role':
-        
+            add.addRole();
             break;
         case 'Add Department':
             add.addDept();

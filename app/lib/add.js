@@ -27,7 +27,9 @@ const addEmployee = async () => {
 };
 
 const addRole = () => {
-    connection.query('SELECT role.id, title, salary, name FROM role INNER JOIN department ON role.department_id = department.id;'), async (err, res) => {
+    //Get Departments from DB
+    connection.query('SELECT name, id FROM department ORDER BY name asc;', async (err, res) => {
+        //Prompt the user for what role they want to add
         const data = await inquirer.prompt(
             [
                 {
@@ -39,11 +41,31 @@ const addRole = () => {
                     type: 'input',
                     name: 'addSalary',
                     message: 'What is this roles salary?',
+                    validate: (value) => {
+                        const pass = value.match(/^[0-9]*$/);
+                        return pass ? true : 'Please enter a number'
+                    }
+                },
+                {
+                    type: 'list',
+                    name: 'addRoleDept',
+                    message: 'Which department is this for?',
+                    choices: () => {
+                        return res.map(dept => dept.name);
+                    }
                 }
             ]
+        );
+        console.log(data);
+        connection.query('INSERT INTO role SET ?', 
+            {
+                title: data.addRole,
+                salary: data.addSalary,
+                department_id: data.add
+            }
         )
-    }
-};
+    });
+}
 
 const addDept = () => {
     //Get departments from DB
