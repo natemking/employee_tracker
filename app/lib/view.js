@@ -17,13 +17,13 @@ const pool = require('./mysql');
 
 //View all employees
 const all = () => {
-    pool.query('SELECT employee.id, employee.first_name, employee.last_name, title, salary, name, CONCAT(employee2.first_name," ", employee2.last_name) AS manager_id FROM employee INNER JOIN role on employee.role_id = role.id INNER JOIN department ON role.department_id = department.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id;', (err, res) => {
+    pool.query('SELECT CONCAT(employee.first_name," " ,employee.last_name) AS full_name, title, salary, name, CONCAT(employee2.first_name," ", employee2.last_name) AS manager_id FROM employee INNER JOIN role on employee.role_id = role.id INNER JOIN department ON role.department_id = department.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id  ORDER BY department.name ASC;', (err, res) => {
         if (err) throw err;
         //Map returned data 
-        const data = res.map(role => [role.id, role.first_name, role.last_name, role.title, role.salary, role.name, role.manager_id]);
+        const data = res.map(role => [role.full_name, role.title, role.salary, role.name, role.manager_id]);
         //Display data
         console.log('\n');
-        console.table(['ID', 'First Name', 'Last Name', 'Role', 'Salary', 'Department', 'Manager'], data);
+        console.table(['Name', 'Role', 'Salary', 'Department', 'Manager'], data);
         console.log('\n');
         app.init();
     });
