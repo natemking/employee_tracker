@@ -60,9 +60,9 @@ Licensed under the GNU GPLv3.0 License. Copyright © 2020
 
 * [Concatenating MySQL results](https://stackoverflow.com/questions/4494775/mysql-concat-function)
 
-* [Favicon](https://favicon.io/emoji-favicons/)
+* [Pooling MySQL connection](https://stackoverflow.com/questions/18496540/node-js-mysql-connection-pooling)
 
-* [Deploying app to Heroku](https://www.freecodecamp.org/news/how-to-deploy-a-nodejs-app-to-heroku-from-github-without-installing-heroku-on-your-machine-433bec770efe/) 
+* [Node, MySql, & Async/Await](https://codeburst.io/node-js-mysql-and-async-await-6fb25b01b628) 
 
 * [Push object to array of of JSON file](https://stackoverflow.com/questions/61473968/how-to-push-object-inside-an-array-while-writing-to-a-file-in-node-js)
 

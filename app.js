@@ -8,7 +8,6 @@ const path = require('path');
 //===================//
 const LIB_DIR = path.resolve(__dirname, './app/lib');
 
-
 //*** Modules ***//
 //===============//
 const logo = require(`${LIB_DIR}/logo.js`);
@@ -16,6 +15,7 @@ const questions = require(`${LIB_DIR}/questions.js`);
 const view = require(`${LIB_DIR}/view.js`);
 const add = require(`${LIB_DIR}/add.js`);
 const remove = require(`${LIB_DIR}/remove.js`);
+const update = require(`${LIB_DIR}/update.js`);
 const pool = require(`${LIB_DIR}/mysql.js`);
 
 // Initialization function
@@ -39,7 +39,7 @@ const init = async () => {
             view.allDept();
             break;
         case 'Update Employee Role':
-            
+            update.updateEmpRole();
             break;
         case 'Update Employee MGR':
 
