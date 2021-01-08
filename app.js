@@ -11,7 +11,7 @@ const LIB_DIR = path.resolve(__dirname, './app/lib');
 //*** Modules ***//
 //===============//
 const logo = require(`${LIB_DIR}/logo.js`);
-const questions = require(`${LIB_DIR}/questions.js`);
+const action = require(`${LIB_DIR}/action.js`);
 const view = require(`${LIB_DIR}/view.js`);
 const add = require(`${LIB_DIR}/add.js`);
 const remove = require(`${LIB_DIR}/remove.js`);
@@ -22,7 +22,7 @@ const pool = require(`${LIB_DIR}/mysql.js`);
 const init = async () => {
   try {
     //Ask action question
-    const data = await inquirer.prompt(questions()[0]);
+    const data = await inquirer.prompt(action()[0]);
    
     //Switch statement to determine what to do per user answers
     switch (data.action) {
@@ -30,7 +30,7 @@ const init = async () => {
             view.all();
             break;
         case 'View All Employees by MGR':
-            
+            view.allByMGR();
             break;
         case 'View All Roles':
             view.allRole();
