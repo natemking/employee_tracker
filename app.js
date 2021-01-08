@@ -70,7 +70,7 @@ const init = async () => {
 
             break;
         case 'Add Employee': 
-            
+            add.addEmployee();
             break;
         case 'Add Role':
             add.addRole();
@@ -107,3 +107,4 @@ init();
 
 //Export init function
 module.exports.init = init;
+

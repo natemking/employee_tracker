@@ -22,8 +22,53 @@ const connection = mysql.createConnection({
     database: 'employee_db'
 });
 
-const addEmployee = async () => {
-    
+const addEmployee = () => {
+    connection.query('SELECT role.id, role.title, CONCAT(employee.first_name," ", employee.last_name) AS manager FROM role LEFT JOIN employee on employee.role_id = role.id WHERE employee.manager_id IS NULL;', async (err, res) => {
+        // console.log(res.map(role => `${role.id} ${role.title}`));
+        const data = await inquirer.prompt(
+            [
+                {
+                    type: 'input',
+                    name: 'addFirst',
+                    message: 'What is their first name?',
+                },
+                {
+                    type: 'input',
+                    name: 'addLast',
+                    message: 'What is their last name?',
+                },
+                {
+                    type: 'list',
+                    name: 'addRole',
+                    message: 'What is their role?',
+                    choices: () => {
+                        return res.map(role => role.title)
+                    }
+                },
+            ]
+        );
+        //Filter the chosen role to get its role_id
+        let roleID;
+        res.filter(role => {
+            if(role.title === data.addRole){
+                roleID = role.id;
+            }
+        });
+        //Add the employee as specified 
+        connection.query('INSERT INTO employee SET ?',
+            {
+                first_name: data.addFirst,
+                last_name: data.addLast,
+                role_id: roleID
+            },
+            (err, res) => {
+                if (err) throw err;
+                console.log(chalk.redBright(`\n${data.addFirst} ${data.addLast} has been added as an employee\n`));
+                connection.end();
+                app.init();
+            }
+        );
+    });
 };
 //Function to add a role
 const addRole = () => {
