@@ -60,7 +60,7 @@ const init = async () => {
             remove.removeDept();
             break;
         case 'View a Dept. Total Utilized Budget':
-
+            view.budget();
             break;
         default:
             pool.end();
