@@ -93,7 +93,6 @@ const addEmployee = () => {
 const addRole = () => {
     //Get Departments from DB
     pool.query('SELECT role.id, name, department_id FROM role INNER JOIN department ON role.department_id = department.id ORDER BY title ASC;', async (err, res) => {
-        console.log(res);
         //Prompt the user for what role they want to add
         const data = await inquirer.prompt(
             [
@@ -127,7 +126,6 @@ const addRole = () => {
                 deptID = dept.department_id;
             }
         });
-        console.log(deptID);
         //Add the role that the user has specified
         pool.query('INSERT INTO role SET ?', 
             {

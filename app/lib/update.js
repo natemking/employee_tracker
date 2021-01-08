@@ -11,8 +11,8 @@ const app = require('../../app');
 //===============//
 const pool = require('./mysql');
 
-const updateEmpRole = () => {
-    pool.query('SELECT role.id, role.title, CONCAT(employee.first_name," ", employee.last_name) AS employee, employee.role_id, employee.id AS employee_id FROM role LEFT JOIN employee on employee.role_id = role.id', async (err,res) => {
+const updateEmpRoleAndMGR = () => {
+    pool.query('SELECT role.id, role.title, CONCAT(employee.first_name," ", employee.last_name) AS employee, employee.id AS employee_id, CONCAT(employee2.first_name, " ", employee2.last_name) AS manager, employee.manager_id FROM role LEFT JOIN employee on employee.role_id = role.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id;', async (err,res) => {
         if (err) throw err;
         const data = await inquirer.prompt(
             [
@@ -39,6 +39,27 @@ const updateEmpRole = () => {
                         let noDupes = [...new Set(result)];
                         return noDupes;
                     }
+                },
+                {
+                    type: 'confirm',
+                    name: 'updateMGR',
+                    message: 'Would you like to change or remove their manager?'
+                },
+                {
+                    type: 'list',
+                    name: 'mgrChoice',
+                    message: 'Please choose their manager',
+                    when: answers => answers.updateMGR,
+                    choices: () => {
+                        let managers = ['Remove Manager'];
+                        res.filter(role => {
+                            if (typeof role.manager === 'string') {
+                                managers.push(role.manager)
+                            }
+                        });
+                        managers = [...new Set(managers)]
+                        return managers;
+                    }
                 }
             ]
         );
@@ -49,18 +70,26 @@ const updateEmpRole = () => {
                 roleID = role.id;
             }
         });
-        //Filter the employee is from the name of the employee chosen
+        //Filter the employee id from the name of the employee chosen
         let empID;
-        res.filter(role => {
-            if (role.employee === data.empChoice) {
-                empID = role.employee_id;
+        res.filter(emp => {
+            if (emp.employee === data.empChoice) {
+                empID = emp.employee_id;
             }
         });
-        //Update the employees role in the DB
-        pool.query('UPDATE employee SET ? WHERE ?', 
+        //Filter the manager id from the name of the manager
+        let mgrID;
+        res.filter(mgr => {
+            if (mgr.manager === data.mgrChoice) {
+                mgrID = mgr.manager_id;
+            }
+        });
+        // Update the employees role in the DB
+        await pool.query('UPDATE employee SET ? WHERE ?', 
         [
             {
-                role_id: roleID
+                role_id: roleID,
+                manager_id: mgrID
             },
             {
                 id: empID
@@ -68,17 +97,23 @@ const updateEmpRole = () => {
         ],
         (err, res) => {
             if (err) throw err;
-            console.log(chalk.redBright(`\n${data.empChoice}'s role has been updated\n`));
-            app.init();
+            //Mgr removed if the user chose so and user notified of update 
+            else if (data.mgrChoice === 'Remove Manager') {
+                pool.query('DELETE FROM employee WHERE ?', { manager_id: mgrID }, (err, res) => {
+                    if (err) throw err;
+                    console.log(chalk.redBright(`\n${data.empChoice}'s role has been updated and their manager removed\n`));
+                    app.init();
+                });
+            //If mgr not removed user notified of update
+            }else{
+                console.log(chalk.redBright(`\n${data.empChoice}'s role has been updated\n`));
+                app.init();
+            }
         });
     });
 };
 
-const updateEmpMgr = () => {
-  
-};
-
 module.exports = {
-    updateEmpRole,
-    updateEmpMgr
+    updateEmpRoleAndMGR,
+    
 }

@@ -38,11 +38,8 @@ const init = async () => {
         case 'View All Departments':
             view.allDept();
             break;
-        case 'Update Employee Role':
-            update.updateEmpRole();
-            break;
-        case 'Update Employee MGR':
-
+        case 'Update Employee Role and/or Manager':
+            update.updateEmpRoleAndMGR();
             break;
         case 'Add Employee': 
             add.addEmployee();
