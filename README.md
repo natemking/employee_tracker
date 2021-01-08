@@ -64,7 +64,7 @@ Licensed under the GNU GPLv3.0 License. Copyright © 2020
 
 * [Node, MySql, & Async/Await](https://codeburst.io/node-js-mysql-and-async-await-6fb25b01b628) 
 
-* [Push object to array of of JSON file](https://stackoverflow.com/questions/61473968/how-to-push-object-inside-an-array-while-writing-to-a-file-in-node-js)
+* [Remove duplicates from an array](https://www.javascripttutorial.net/array/javascript-remove-duplicates-from-array/)
 
 * [`require()` vs `fs.readFileSync()` to read JSON files](https://dev.to/tejesh/nodejs-read-json-file-using-require-vs-fs-module-4f94) -->
 
