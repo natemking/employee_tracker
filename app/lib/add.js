@@ -21,10 +21,11 @@ const connection = mysql.createConnection({
     password: 'root',
     database: 'employee_db'
 });
-
+//Function to add an employee
 const addEmployee = () => {
-    connection.query('SELECT role.id, role.title, CONCAT(employee.first_name," ", employee.last_name) AS manager FROM role LEFT JOIN employee on employee.role_id = role.id WHERE employee.manager_id IS NULL;', async (err, res) => {
-        // console.log(res.map(role => `${role.id} ${role.title}`));
+    connection.query('SELECT role.id, role.title, CONCAT(employee2.first_name," ", employee2.last_name) AS manager, employee.manager_id FROM role LEFT JOIN employee on employee.role_id = role.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id;', async (err, res) => {
+       console.log(res);
+       
         const data = await inquirer.prompt(
             [
                 {
@@ -45,6 +46,26 @@ const addEmployee = () => {
                         return res.map(role => role.title)
                     }
                 },
+                {
+                    type: 'confirm',
+                    name: 'hasMGR',
+                    message: 'Will this employee be managed?'
+                },
+                {
+                    type: 'list',
+                    name: 'manager',
+                    message: 'Please choose their manager',
+                    when: answers => answers.hasMGR,
+                    choices: () => {
+                        const managers = [];
+                        res.filter(role => {
+                            if (typeof role.manager === 'string') {
+                                managers.push(role.manager)
+                            }
+                        });
+                        return managers;
+                    }
+                }
             ]
         );
         //Filter the chosen role to get its role_id
@@ -54,17 +75,26 @@ const addEmployee = () => {
                 roleID = role.id;
             }
         });
+        //Filter the chosen manger and assign manager_id
+        let managerID;
+        res.filter(role => {
+            if (role.manager === data.manager){
+                managerID = role.manager_id;
+            }
+        });
+        console.log(managerID)
         //Add the employee as specified 
         connection.query('INSERT INTO employee SET ?',
             {
                 first_name: data.addFirst,
                 last_name: data.addLast,
-                role_id: roleID
+                role_id: roleID,
+                manager_id: managerID
+
             },
             (err, res) => {
                 if (err) throw err;
                 console.log(chalk.redBright(`\n${data.addFirst} ${data.addLast} has been added as an employee\n`));
-                connection.end();
                 app.init();
             }
         );
@@ -111,7 +141,6 @@ const addRole = () => {
             (err, res) => {
                 if (err) throw err;
                 console.log(chalk.redBright(`\n${data.addRole} has been added to roles\n`));
-                connection.end();
                 app.init();
             }
         );
@@ -146,7 +175,6 @@ const addDept = () => {
             (err, res) => {
                 if (err) throw err;
                 console.log(chalk.redBright(`\n${data.addDept} has been added to departments\n`));
-                connection.end();
                 app.init();
             }
         );
