@@ -74,8 +74,10 @@ const init = async () => {
         case 'View a Dept. Total Utilized Budget':
 
             break;
-        default:
+        case 'Quit':
             connection.end();
+            break;
+        default:
             break;
     }
     
