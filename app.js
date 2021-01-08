@@ -1,8 +1,7 @@
 //** Dependencies ***//
 //===================//
-const cTable = require('console.table');
 const inquirer = require('inquirer');
-const mysql = require('mysql');
+const cTable = require('console.table');
 const path = require('path');
 
 //*** Directories ***//
@@ -17,15 +16,7 @@ const questions = require(`${LIB_DIR}/questions.js`);
 const view = require(`${LIB_DIR}/view.js`);
 const add = require(`${LIB_DIR}/add.js`);
 const remove = require(`${LIB_DIR}/remove.js`);
-
-const connection = mysql.createConnection({
-    host: "localhost",
-    port: 3306,
-    user: "root",
-    password: "root",
-    database: "employee_db"
-});
-
+const pool = require(`${LIB_DIR}/mysql.js`);
 
 // Initialization function
 const init = async () => {
@@ -74,10 +65,8 @@ const init = async () => {
         case 'View a Dept. Total Utilized Budget':
 
             break;
-        case 'Quit':
-            connection.end();
-            break;
         default:
+            pool.end();
             break;
     }
     

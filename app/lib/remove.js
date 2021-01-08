@@ -1,27 +1,20 @@
 //** Dependencies ***//
 //===================//
 const inquirer = require('inquirer');
-const mysql = require('mysql');
 const chalk = require('chalk');
 
 //*** Directories ***//
 //===================//
 const app = require('../../app');
 
-//*** DB connection ***//
-//===================//
-const connection = mysql.createConnection({
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: 'root',
-    database: 'employee_db'
-});
+//*** Modules ***//
+//===============//
+const pool = require('./mysql');
 
 //Function to remove an employee
 const removeEmployee = () => {
     //Get employees frm db
-    connection.query('SELECT id, CONCAT(first_name," ",last_name) AS name FROM employee', async (err, res) => {
+    pool.query('SELECT id, CONCAT(first_name," ",last_name) AS name FROM employee', async (err, res) => {
         if (err) throw err;
         const data = await inquirer.prompt(
             [
@@ -42,7 +35,7 @@ const removeEmployee = () => {
             }
         });
         //Delete the chosen employee
-        connection.query('DELETE FROM employee WHERE ?',
+        pool.query('DELETE FROM employee WHERE ?',
         {
             id: empID
         },
@@ -57,7 +50,7 @@ const removeEmployee = () => {
 //Function to remove a role
 const removeRole = async () => {
     //Get roles from DB
-    connection.query('SELECT title FROM role ORDER BY title asc', async (err, res) => {
+    pool.query('SELECT title FROM role ORDER BY title asc', async (err, res) => {
         if (err) throw err;
         //Prompt what dept to be removed
         const data = await inquirer.prompt(
@@ -73,7 +66,7 @@ const removeRole = async () => {
             ]
         );
         //Delete the chosen role
-        connection.query('DELETE FROM role WHERE ?',
+        pool.query('DELETE FROM role WHERE ?',
             {
                 title: data.removeRole
             },
@@ -89,7 +82,7 @@ const removeRole = async () => {
 //Function to remove a dept
 const removeDept = () => {
     //Get departments from DB
-    connection.query('SELECT name FROM department ORDER BY name asc;', async (err, res) => {
+    pool.query('SELECT name FROM department ORDER BY name asc;', async (err, res) => {
         if (err) throw err;
         //Prompt what dept to be removed
         let data = await inquirer.prompt(
@@ -105,7 +98,7 @@ const removeDept = () => {
             ]
         ); 
         //Delete the chosen dept from DB
-        connection.query('DELETE FROM department WHERE ?',
+        pool.query('DELETE FROM department WHERE ?',
             {
                 name: data.removeDept
             },

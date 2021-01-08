@@ -1,7 +1,6 @@
 //** Dependencies ***//
 //===================//
 const inquirer = require('inquirer');
-const mysql = require('mysql');
 const chalk = require('chalk');
 
 //*** Directories ***//
@@ -10,20 +9,11 @@ const app = require('../../app');
 
 //*** Modules ***//
 //===============//
-const questions = require(`./questions.js`);
+const pool = require('./mysql');
 
-//*** DB connection ***//
-//===================//
-const connection = mysql.createConnection({
-    host: 'localhost',
-    port: 3306,
-    user: 'root',
-    password: 'root',
-    database: 'employee_db'
-});
 //Function to add an employee
 const addEmployee = () => {
-    connection.query('SELECT role.id, role.title, CONCAT(employee2.first_name," ", employee2.last_name) AS manager, employee.manager_id FROM role LEFT JOIN employee on employee.role_id = role.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id;', async (err, res) => {
+    pool.query('SELECT role.id, role.title, CONCAT(employee2.first_name," ", employee2.last_name) AS manager, employee.manager_id FROM role LEFT JOIN employee on employee.role_id = role.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id;', async (err, res) => {
         //Prompt the user for employee data 
         const data = await inquirer.prompt(
             [
@@ -82,7 +72,7 @@ const addEmployee = () => {
             }
         });
         //Add the employee as specified 
-        connection.query('INSERT INTO employee SET ?',
+        pool.query('INSERT INTO employee SET ?',
             {
                 first_name: data.addFirst,
                 last_name: data.addLast,
@@ -102,7 +92,7 @@ const addEmployee = () => {
 //Function to add a role
 const addRole = () => {
     //Get Departments from DB
-    connection.query('SELECT role.id, name, department_id FROM role INNER JOIN department ON role.department_id = department.id ORDER BY title ASC;', async (err, res) => {
+    pool.query('SELECT role.id, name, department_id FROM role INNER JOIN department ON role.department_id = department.id ORDER BY title ASC;', async (err, res) => {
         console.log(res);
         //Prompt the user for what role they want to add
         const data = await inquirer.prompt(
@@ -139,7 +129,7 @@ const addRole = () => {
         });
         console.log(deptID);
         //Add the role that the user has specified
-        connection.query('INSERT INTO role SET ?', 
+        pool.query('INSERT INTO role SET ?', 
             {
                 title: data.addRole,
                 salary: data.addSalary,
@@ -157,7 +147,7 @@ const addRole = () => {
 //Function to add a department
 const addDept = () => {
     //Get departments from DB
-    connection.query('SELECT name FROM department', async (err,res) => {
+    pool.query('SELECT name FROM department', async (err,res) => {
         //Prompt user for what dept they want to add
         const data = await inquirer.prompt(
             [  
@@ -176,7 +166,7 @@ const addDept = () => {
             ]
         );
         //Add the new dept to the DB
-        connection.query('INSERT INTO department SET ?',
+        pool.query('INSERT INTO department SET ?',
             {
                 name: data.addDept
             },
