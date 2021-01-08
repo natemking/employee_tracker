@@ -39,8 +39,7 @@ const init = async () => {
             view.all();
             break;
         case 'View All Employees by MGR':
-            // await inquirer.prompt(questions()[1]);
-            view.allByMgr();
+            
             break;
         case 'View All Roles':
             view.allRole();
@@ -64,7 +63,7 @@ const init = async () => {
             add.addDept();
             break;   
         case 'Remove Employee':
-            
+            remove.removeEmployee();
             break;
         case 'Remove Role':
             remove.removeRole();

@@ -8,10 +8,6 @@ const chalk = require('chalk');
 //===================//
 const app = require('../../app');
 
-//*** Modules ***//
-//===============//
-const questions = require(`./questions.js`);
-
 //*** DB connection ***//
 //===================//
 const connection = mysql.createConnection({
@@ -22,9 +18,42 @@ const connection = mysql.createConnection({
     database: 'employee_db'
 });
 
-const removeEmployee = async () => {
-
+//Function to remove an employee
+const removeEmployee = () => {
+    //Get employees frm db
+    connection.query('SELECT id, CONCAT(first_name," ",last_name) AS name FROM employee', async (err, res) => {
+        if (err) throw err;
+        const data = await inquirer.prompt(
+            [
+                {
+                    type: 'list',
+                    name: 'removeEmp',
+                    message: 'Please choose and employee to remove',
+                    choices: () => {
+                        return res.map(emp => emp.name);
+                    }
+                }
+            ]
+        );
+        let empID;
+        res.filter(emp => {
+            if (emp.name === data.removeEmp) {
+                empID = emp.id;
+            }
+        });
+        //Delete the chosen employee
+        connection.query('DELETE FROM employee WHERE ?',
+        {
+            id: empID
+        },
+        (err, res) => {
+            if (err) throw err;
+            console.log(chalk.redBright(`\n${data.removeEmp} has been removed\n`));
+            app.init();
+        })
+    });
 };
+
 //Function to remove a role
 const removeRole = async () => {
     //Get roles from DB
@@ -51,12 +80,12 @@ const removeRole = async () => {
             (err, res) => {
                 if (err) throw err;
                 console.log(chalk.redBright(`\n${data.removeRole} has been removed from roles\n`));
-                connection.end();
                 app.init();
             }
         );
     });
 };
+
 //Function to remove a dept
 const removeDept = () => {
     //Get departments from DB
@@ -83,7 +112,6 @@ const removeDept = () => {
             (err, res) => {
                 if (err) throw err;
                 console.log(chalk.redBright(`\n${data.removeDept} has been removed from departments\n`));
-                connection.end();
                 app.init();
             }
         );

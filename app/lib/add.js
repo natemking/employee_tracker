@@ -24,8 +24,7 @@ const connection = mysql.createConnection({
 //Function to add an employee
 const addEmployee = () => {
     connection.query('SELECT role.id, role.title, CONCAT(employee2.first_name," ", employee2.last_name) AS manager, employee.manager_id FROM role LEFT JOIN employee on employee.role_id = role.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id;', async (err, res) => {
-       console.log(res);
-       
+        //Prompt the user for employee data 
         const data = await inquirer.prompt(
             [
                 {
@@ -82,7 +81,6 @@ const addEmployee = () => {
                 managerID = role.manager_id;
             }
         });
-        console.log(managerID)
         //Add the employee as specified 
         connection.query('INSERT INTO employee SET ?',
             {
@@ -99,7 +97,8 @@ const addEmployee = () => {
             }
         );
     });
-};
+}
+
 //Function to add a role
 const addRole = () => {
     //Get Departments from DB
@@ -146,6 +145,7 @@ const addRole = () => {
         );
     });
 }
+
 //Function to add a department
 const addDept = () => {
     //Get departments from DB
@@ -179,7 +179,7 @@ const addDept = () => {
             }
         );
     });    
-};
+}
 
 module.exports = {
     addEmployee,
