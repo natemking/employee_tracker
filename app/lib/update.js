@@ -14,6 +14,7 @@ const pool = require('./mysql');
 const updateEmpRoleAndMGR = () => {
     pool.query('SELECT role.id, role.title, CONCAT(employee.first_name," ", employee.last_name) AS employee, employee.id AS employee_id, CONCAT(employee2.first_name, " ", employee2.last_name) AS manager, employee.manager_id FROM role LEFT JOIN employee on employee.role_id = role.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id;', async (err,res) => {
         if (err) throw err;
+        //Prompt to update employee role and add or remove their mgr
         const data = await inquirer.prompt(
             [
                 {
@@ -63,21 +64,21 @@ const updateEmpRoleAndMGR = () => {
                 }
             ]
         );
-        //Filter the role id from the user role choice
+        //Filter role for role id
         let roleID;
         res.filter(role => {
             if (role.title === data.roleChoice) {
                 roleID = role.id;
             }
         });
-        //Filter the employee id from the name of the employee chosen
+        //Filter employee name for employee id
         let empID;
         res.filter(emp => {
             if (emp.employee === data.empChoice) {
                 empID = emp.employee_id;
             }
         });
-        //Filter the manager id from the name of the manager
+        //Filter mgr name for mgr id
         let mgrID;
         res.filter(mgr => {
             if (mgr.manager === data.mgrChoice) {
@@ -97,15 +98,17 @@ const updateEmpRoleAndMGR = () => {
         ],
         (err, res) => {
             if (err) throw err;
-            //Mgr removed if the user chose so and user notified of update 
+            //If mgr removed 
             else if (data.mgrChoice === 'Remove Manager') {
                 pool.query('DELETE FROM employee WHERE ?', { manager_id: mgrID }, (err, res) => {
                     if (err) throw err;
+                    //Success message
                     console.log(chalk.redBright(`\n${data.empChoice}'s role has been updated and their manager removed\n`));
                     app.init();
                 });
-            //If mgr not removed user notified of update
+            //If mgr not removed
             }else{
+                //Success message
                 console.log(chalk.redBright(`\n${data.empChoice}'s role has been updated\n`));
                 app.init();
             }

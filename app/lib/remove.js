@@ -3,19 +3,19 @@
 const inquirer = require('inquirer');
 const chalk = require('chalk');
 
-//*** Directories ***//
-//===================//
-const app = require('../../app');
-
 //*** Modules ***//
 //===============//
 const pool = require('./mysql');
+const app = require('../../app');
 
+//*** Remove data functions ***//
+//===========================//
 //Function to remove an employee
 const removeEmployee = () => {
     //Get employees frm db
     pool.query('SELECT id, CONCAT(first_name," ",last_name) AS name FROM employee', async (err, res) => {
         if (err) throw err;
+        //Prompt to choose an employee to delete
         const data = await inquirer.prompt(
             [
                 {
@@ -28,6 +28,7 @@ const removeEmployee = () => {
                 }
             ]
         );
+        //Filter the employee name to get employee id
         let empID;
         res.filter(emp => {
             if (emp.name === data.removeEmp) {
@@ -41,6 +42,7 @@ const removeEmployee = () => {
         },
         (err, res) => {
             if (err) throw err;
+            //Success message
             console.log(chalk.redBright(`\n${data.removeEmp} has been removed\n`));
             app.init();
         })
@@ -72,6 +74,7 @@ const removeRole = async () => {
             },
             (err, res) => {
                 if (err) throw err;
+                //Success message
                 console.log(chalk.redBright(`\n${data.removeRole} has been removed from roles\n`));
                 app.init();
             }
@@ -104,6 +107,7 @@ const removeDept = () => {
             },
             (err, res) => {
                 if (err) throw err;
+                //Success message
                 console.log(chalk.redBright(`\n${data.removeDept} has been removed from departments\n`));
                 app.init();
             }

@@ -1,5 +1,5 @@
 module.exports =  () => [
-   [    //Initial action question
+   [    //Initial user action question
        {
             type: 'list',
             name: 'action',

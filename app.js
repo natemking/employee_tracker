@@ -66,8 +66,6 @@ const init = async () => {
             pool.end();
             break;
     }
-    
-      
   }catch(err) {
       console.log(err);
   }

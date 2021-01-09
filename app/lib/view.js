@@ -2,22 +2,16 @@
 //===================//
 const inquirer = require('inquirer');
 
-//*** Directories ***//
-//===================//
-const app = require('../../app');
-
 //*** Modules ***//
 //===============//
 const pool = require('./mysql');
-
-
+const app = require('../../app');
 
 //*** View data functions ***//
 //===========================//
-
 //View all employees
 const all = () => {
-    pool.query('SELECT CONCAT(employee.first_name," " ,employee.last_name) AS full_name, title, salary, name, CONCAT(employee2.first_name," ", employee2.last_name) AS manager_id FROM employee INNER JOIN role on employee.role_id = role.id INNER JOIN department ON role.department_id = department.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id  ORDER BY department.name ASC;', (err, res) => {
+    pool.query('SELECT CONCAT(employee.first_name," " ,employee.last_name) AS full_name, title, salary, name, CONCAT(employee2.first_name," ", employee2.last_name) AS manager_id FROM employee INNER JOIN role on employee.role_id = role.id INNER JOIN department ON role.department_id = department.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id  ORDER BY full_name ASC;', (err, res) => {
         if (err) throw err;
         //Display data
         console.log('\n');
@@ -31,6 +25,7 @@ const all = () => {
 const allByMGR = () => {
     pool.query('SELECT CONCAT(employee2.first_name, " ", employee2.last_name) AS manager, employee.manager_id FROM employee INNER JOIN role on employee.role_id = role.id INNER JOIN department ON role.department_id = department.id LEFT JOIN employee AS employee2 ON employee.manager_id = employee2.id  ORDER BY department.name ASC;', async (err, res) => {
         if (err) throw err;
+        //Prompt use to select a manager
         let data = await inquirer.prompt(
             [
                 {
@@ -69,8 +64,8 @@ const allByMGR = () => {
             console.table([`${data.managers}'s Employees`], res.map(emp => [emp.full_name]));
             console.log('\n');
             app.init();
-        })
-    }) 
+        });
+    }); 
 }
 
 //View all roles
@@ -97,10 +92,11 @@ const allDept = () => {
     });
 }
 
-
+//View total utilized budget per department
 const budget = () =>{
     pool.query('SELECT name FROM department', async (err, res) => {
         if(err) throw err;
+        //Prompt to chose a department
         const data = await inquirer.prompt(
             [
                 {
@@ -113,16 +109,18 @@ const budget = () =>{
                 }
             ]
         );
-        pool.query('SELECT employee.role_id, salary, department_id, department.name FROM role INNER JOIN employee on employee.role_id = role.id right JOIN department ON role.department_id = department.id WHERE ?;', {name: data.budget}, (err, res) => {
+        pool.query('SELECT employee.role_id, salary, department_id, department.name FROM role INNER JOIN employee on employee.role_id = role.id right JOIN department ON role.department_id = department.id WHERE ?;', 
+        {name: data.budget}, 
+        (err, res) => {
             if (err) throw err;
             //Map the dept's salaries then calculate for total 
             const total = res.map(dept => dept.salary).reduce((acc, val) => acc + val)
+            //Display data
             console.log('\n');
             console.table(`${data.budget}'s Total Utilized Budget`, `$${total}`);
             console.log('\n');
             app.init();
-        }
-        );
+        });
     });
 }
 
