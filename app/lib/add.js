@@ -97,7 +97,7 @@ const addEmployee = () => {
 //Function to add a role
 const addRole = () => {
     //Get Departments from DB
-    pool.query('SELECT role.id, name, department_id FROM role INNER JOIN department ON role.department_id = department.id ORDER BY title ASC;', async (err, res) => {
+    pool.query('SELECT role.id, name, department_id, department.id FROM role RIGHT JOIN department ON role.department_id = department.id ORDER BY title ASC;', async (err, res) => {
         if (err) throw err;
         //Prompt for what role to add
         const data = await inquirer.prompt(
@@ -121,7 +121,9 @@ const addRole = () => {
                     name: 'addRoleDept',
                     message: 'Which department is this for?',
                     choices: () => {
-                        return res.map(dept => dept.name);
+                        let roles = res.map(dept => dept.name);
+                        roles = [...new Set(roles)];
+                        return roles;
                     }
                 }
             ]
@@ -130,7 +132,7 @@ const addRole = () => {
         let deptID;
         res.filter(dept => {
             if (dept.name === data.addRoleDept) {
-                deptID = dept.department_id;
+                deptID = dept.id;
             }
         });
         //Add the role that the user has specified
