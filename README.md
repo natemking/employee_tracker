@@ -64,4 +64,8 @@ Licensed under the GNU GPLv3.0 License. Copyright © 2020
 
 * [Remove duplicates from an array](https://www.javascripttutorial.net/array/javascript-remove-duplicates-from-array/)
 
+---
 
+GitHub: [@natemking](https://github.com/natemking/)
+
+Email: [natmeking@gmail.com](mailto:natmeking@gmail.com)
